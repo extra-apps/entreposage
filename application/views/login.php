@@ -34,27 +34,33 @@
                     <div class="login-content">
                         <div class="login-logo">
                             <a href="#">
-                                <img src="<?= base_url('assets/') ?>images/icon/logo.png" alt="CoolAdmin">
+                                <img src="<?= base_url('assets/') ?>images/logo.png" width="200px" height="200px" alt="">
                             </a>
                         </div>
                         <div class="login-form">
-                            <form action="" method="post">
+                            <form action="<?= site_url('app/connexion') ?>" method="post">
                                 <div class="form-group">
-                                    <label>Email</label>
-                                    <input required class="au-input au-input--full" type="email" name="email" placeholder="Email">
+                                    <label>Email ou telephone</label>
+                                    <input required class="au-input au-input--full" name="login" placeholder="Email ou telephone">
                                 </div>
                                 <div class="form-group">
                                     <label>Mot de passe</label>
-                                    <input required class="au-input au-input--full" type="password" name="password" placeholder="Mot de passe">
+                                    <input required class="au-input au-input--full" type="password" name="pass" placeholder="Mot de passe">
                                 </div>
+                                <?php if ($this->session->message) : ?>
+                                    <div class="form-group">
+                                        <div class="alert alert-danger">
+                                            <h5><?= $this->session->message; ?></h5>
+                                        </div>
+                                    </div>
+                                <?php endif ?>
                                 <button class="au-btn au-btn--block au-btn--green m-b-20" type="submit">connexion</button>
                             </form>
-                            <div class="register-link">
+                            <!-- <div class="register-link">
                                 <p>
-                                    Don't you have account?
-                                    <a href="#">Sign Up Here</a>
+                                    <a href="#">Créer un compte</a>
                                 </p>
-                            </div>
+                            </div> -->
                         </div>
                     </div>
                 </div>
