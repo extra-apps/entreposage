@@ -31,5 +31,18 @@
         //         [10, 25, 50, 100, "All"],
         //     ],
         // });
+
+        $(".show_hide_password").on('click', function(event) {
+            event.preventDefault();
+            var div = $(this);
+            event.preventDefault();
+            if (div.prev().attr("type") == "text") {
+                div.prev().attr('type', 'password');
+                div.find('i').removeClass("fa-eye").addClass("fa-eye-slash");
+            } else if (div.prev().attr("type") == "password") {
+                div.prev().attr('type', 'text');
+                div.find('i').removeClass("fa-eye-slash").addClass("fa-eye");
+            }
+        });
     })
 </script>

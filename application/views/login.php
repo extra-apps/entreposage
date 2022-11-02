@@ -54,7 +54,7 @@
                                         </div>
                                     </div>
                                 <?php endif ?>
-                                <button class="au-btn au-btn--block au-btn--green m-b-20" type="submit">connexion</button>
+                                <button class="btn btn-block btn-danger m-b-20" type="submit">connexion</button>
                             </form>
                             <!-- <div class="register-link">
                                 <p>

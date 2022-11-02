@@ -24,14 +24,12 @@ class Admin extends CI_Controller
 
 	function declarants()
 	{
-		$data['declarants'] = $this->db->order_by('iddeclarant', 'desc')->get('declarant')->result();
-		$this->load->view('admin/declarants', $data);
+		$this->load->view('admin/declarants');
 	}
 
 	function verificateurs()
 	{
-		$data['verificateurs'] = $this->db->order_by('idverificateur', 'desc')->get('verificateur')->result();
-		$this->load->view('admin/verificateurs', $data);
+		$this->load->view('admin/verificateurs');
 	}
 
 	function clients()

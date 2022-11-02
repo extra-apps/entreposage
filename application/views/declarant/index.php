@@ -2,16 +2,16 @@
 <html lang="fr">
 
 <head>
-    <title>Vérificateurs | admin</title>
+    <title>Accueil | déclarant <?= ucfirst($this->user->nomdeclarant) ?> </title>
     <?= $this->load->view('inc/css', null, true); ?>
 </head>
 
 <body class="animsition">
     <div class="page-wrapper">
-        <?= $this->load->view('admin/sidebar', null, true); ?>
+        <?= $this->load->view('declarant/sidebar', null, true); ?>
 
         <div class="page-container">
-            <?= $this->load->view('admin/header', null, true); ?>
+            <?= $this->load->view('declarant/header', null, true); ?>
 
             <div class="main-content">
                 <div class="section__content section__content--p30">
@@ -19,7 +19,7 @@
                         <div class="row">
                             <div class="col-md-12">
                                 <div class="overview-wrap mb-3">
-                                    <h2 class="title-1">Vérificateurs <span class="badge badge-danger badge-pill" nb></span> </h2>
+                                    <h2 class="title-1">Marchandises <span class="badge badge-danger badge-pill" nb></span> </h2>
                                     <button class="btn btn-danger" data-toggle="modal" data-target="#modal">
                                         <i class="zmdi zmdi-plus-circle"></i>Ajouter</button>
                                 </div>
@@ -33,9 +33,9 @@
                                         <thead>
                                             <tr>
                                                 <th>#</th>
-                                                <th>Nom du vérificateur</th>
-                                                <th>Code du vérificateur</th>
-                                                <th>Email du vérificateur</th>
+                                                <th>Nom du client</th>
+                                                <th>Téléphone du client</th>
+                                                <th>Email du client</th>
                                                 <th></th>
                                             </tr>
                                         </thead>
@@ -61,7 +61,7 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h4>Nouveau vérificateur</h4>
+                    <h4>Nouveau client</h4>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -69,16 +69,16 @@
                 <form id="f-add">
                     <div class="modal-body">
                         <div class="form-group">
-                            <label for="">Nom du vérificateur</label>
-                            <input name="nomverif" required class="form-control" placeholder="Nom du vérificateur">
+                            <label for="">Nom du client</label>
+                            <input name="nomclient" required class="form-control" placeholder="Nom du client">
                         </div>
                         <div class="form-group">
-                            <label for="">Code du vérificateur</label>
-                            <input name="codeverif" required class="form-control" placeholder="Code du vérificateur" value="<?= rand(10000, 99999) ?>">
+                            <label for="">Telephone du client</label>
+                            <input name="telephone" required class="form-control telephone" placeholder="Telephone du client">
                         </div>
                         <div class="form-group">
-                            <label for="">Email du vérificateur</label>
-                            <input name="email" required class="form-control" placeholder="Email du declarant">
+                            <label for="">Email du client</label>
+                            <input name="email" required class="form-control" placeholder="Email du client">
                         </div>
                         <div class="form-group">
                             <label for="">Mot de passe</label>
@@ -106,8 +106,11 @@
     </div>
 
     <?= $this->load->view('inc/js', null, true); ?>
+    <script src="<?= base_url('assets/js/inputmask.js') ?>"></script>
     <script>
         $(function() {
+            $(".telephone").inputmask("(999)999999999");
+
             $('#f-add').submit(function() {
                 event.preventDefault();
                 var form = $(this);
@@ -118,7 +121,7 @@
                 var rep = $('#rep');
                 rep.slideUp();
                 $.ajax({
-                    url: '<?= site_url('json/verificateur') ?>',
+                    url: '<?= site_url('json/client') ?>',
                     type: 'post',
                     data: data,
                     success: function(r) {
@@ -142,14 +145,14 @@
 
             function getdata() {
                 var table = $('[t-data]');
-                $.getJSON('<?= site_url('json/verificateur_get') ?>', function(r) {
+                $.getJSON('<?= site_url('json/client_get') ?>', function(r) {
                     var str = '';
                     $(r).each(function(i, e) {
                         str += `
                         <tr>
                         <td>${i+1}</td>
-                        <td>${e.nomverif}</td>
-                        <td>${e.codeverif}</td>
+                        <td>${e.nomclient}</td>
+                        <td>${e.telephone}</td>
                         <td>${e.email}</td>
                         <td></td>
                         </tr>

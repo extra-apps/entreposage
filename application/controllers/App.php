@@ -30,6 +30,11 @@ class App extends CI_Controller
 				'idadmin' => $r[0]->idadmin
 			]);
 			redirect('admin');
+		} else if (count($r = $this->db->where($data)->get('declarant')->result())) {
+			$this->session->set_userdata([
+				'iddeclarant' => $r[0]->iddeclarant
+			]);
+			redirect('declarant');
 		}
 		$this->session->set_flashdata([
 			'message' => "Echec de connexion, login ou mot de passe incorrect."
