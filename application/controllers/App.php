@@ -35,6 +35,11 @@ class App extends CI_Controller
 				'iddeclarant' => $r[0]->iddeclarant
 			]);
 			redirect('declarant');
+		} else if (count($r = $this->db->where($data)->get('verificateur')->result())) {
+			$this->session->set_userdata([
+				'idverificateur' => $r[0]->idverificateur
+			]);
+			redirect('verificateur');
 		}
 		$this->session->set_flashdata([
 			'message' => "Echec de connexion, login ou mot de passe incorrect."

@@ -34,7 +34,11 @@ class Admin extends CI_Controller
 
 	function clients()
 	{
-		$data['clients'] = $this->db->order_by('idclient', 'desc')->get('client')->result();
-		$this->load->view('admin/clients', $data);
+		$this->load->view('admin/clients');
+	}
+
+	function marchandises()
+	{
+		$this->load->view('admin/marchandises');
 	}
 }

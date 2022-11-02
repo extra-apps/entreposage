@@ -33,9 +33,10 @@
                                         <thead>
                                             <tr>
                                                 <th>#</th>
-                                                <th>Nom du client</th>
-                                                <th>Téléphone du client</th>
-                                                <th>Email du client</th>
+                                                <th>Marchandise</th>
+                                                <th>Code</th>
+                                                <th>Type</th>
+                                                <th>Etat</th>
                                                 <th></th>
                                             </tr>
                                         </thead>
@@ -61,7 +62,7 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h4>Nouveau client</h4>
+                    <h4>Nouvelle marchandise</h4>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -69,25 +70,16 @@
                 <form id="f-add">
                     <div class="modal-body">
                         <div class="form-group">
-                            <label for="">Nom du client</label>
-                            <input name="nomclient" required class="form-control" placeholder="Nom du client">
+                            <label for="">Nom de la marchandise</label>
+                            <input name="nommarchandise" required class="form-control">
                         </div>
                         <div class="form-group">
-                            <label for="">Telephone du client</label>
-                            <input name="telephone" required class="form-control telephone" placeholder="Telephone du client">
+                            <label for="">Type de la marchandise</label>
+                            <input name="typemarchandise" required class="form-control">
                         </div>
                         <div class="form-group">
-                            <label for="">Email du client</label>
-                            <input name="email" required class="form-control" placeholder="Email du client">
-                        </div>
-                        <div class="form-group">
-                            <label for="">Mot de passe</label>
-                            <div class="d-flex ">
-                                <input type="password" name="mdp" value="123456" class="form-control w-100" placeholder="Mot de passe" required>
-                                <div class="input-group-addon show_hide_password" style="cursor: pointer">
-                                    <a href="#"><i class="text-danger fa fa-eye-slash" aria-hidden="true"></i></a>
-                                </div>
-                            </div>
+                            <label for="">Code de la marchandise</label>
+                            <input name="code" required class="form-control">
                         </div>
                         <div class="form-group">
                             <div id="rep"></div>
@@ -105,11 +97,53 @@
         </div>
     </div>
 
+    <div class="modal fade" id="modaldeclare" tabindex="-1" role="dialog" aria-hidden="true" data-backdrop="static">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4>Déclaration de la marchandise</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form id="f-declare">
+                    <div class="modal-body">
+                        <input type="hidden" name="idmarchandise">
+                        <div class="form-group">
+                            <label for="">Nom de la marchandise</label>
+                            <input id="march" disabled class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label for="">Numero declaration</label>
+                            <input name="numero_declaration" required class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label for="">Numero liquidation</label>
+                            <input name="numero_liquidation" required class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label for="">Quantité</label>
+                            <input name="qte" required class="form-control" type="number" min="1">
+                        </div>
+                        <div class="form-group">
+                            <div id="rep"></div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
+                        <button type="submit" class="btn btn-danger">
+                            <span></span>
+                            Déclarer
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
     <?= $this->load->view('inc/js', null, true); ?>
-    <script src="<?= base_url('assets/js/inputmask.js') ?>"></script>
     <script>
         $(function() {
-            $(".telephone").inputmask("(999)999999999");
 
             $('#f-add').submit(function() {
                 event.preventDefault();
@@ -118,10 +152,10 @@
                 btn.find('span').removeClass().addClass('fa fa-spinner fa-spin');
                 var data = $(form).serialize();
                 $(':input', form).attr('disabled', true);
-                var rep = $('#rep');
+                var rep = $('#rep', form);
                 rep.slideUp();
                 $.ajax({
-                    url: '<?= site_url('json/client') ?>',
+                    url: '<?= site_url('json/marchandise') ?>',
                     type: 'post',
                     data: data,
                     success: function(r) {
@@ -143,23 +177,63 @@
                 });
             })
 
+            $('#f-declare').submit(function() {
+                event.preventDefault();
+                var form = $(this);
+                var btn = $(':submit', form)
+                btn.find('span').removeClass().addClass('fa fa-spinner fa-spin');
+                var data = $(form).serialize();
+                $(':input', form).attr('disabled', true);
+                var rep = $('#rep', form);
+                rep.slideUp();
+                $.ajax({
+                    url: '<?= site_url('json/marchandise_declare') ?>',
+                    type: 'post',
+                    data: data,
+                    success: function(r) {
+                        btn.find('span').removeClass();
+                        $(':input', form).attr('disabled', false);
+                        if (r.success) {
+                            rep.removeClass().addClass('alert alert-success').html(r.message).slideDown();
+                            getdata();
+                        } else {
+                            rep.removeClass().addClass('alert alert-danger').html(r.message).slideDown();
+                        }
+                    },
+                    error: function(r) {
+                        console.error(r);
+                        alert("Echec reseau, la page va s'actualiser");
+                        location.reload();
+                    }
+                });
+            })
+
+
             function getdata() {
                 var table = $('[t-data]');
-                $.getJSON('<?= site_url('json/client_get') ?>', function(r) {
+                $.getJSON('<?= site_url('json/marchandise_get') ?>', function(r) {
                     var str = '';
                     $(r).each(function(i, e) {
                         str += `
                         <tr>
                         <td>${i+1}</td>
-                        <td>${e.nomclient}</td>
-                        <td>${e.telephone}</td>
-                        <td>${e.email}</td>
-                        <td></td>
+                        <td>${e.nommarchandise}</td>
+                        <td>${e.code}</td>
+                        <td>${e.typemarchandise}</td>
+                        <td class="font-weight-bold text-white ${e.declare ? 'bg-success' : 'bg-danger' }">${e.declare ? 'DECLARE' : 'NON DECLARE' }</td>
+                        <td>
+                            ${e.declare ? '' : "<button marchandise='"+e.nommarchandise+"' class='btn btn-danger declare' value='"+e.idmarchandise+"' >Déclarer</button>"}
+                        </td>
                         </tr>
                         `;
                     });
                     table.find('tbody').empty().html(str);
                     $('span[nb]').html(r.length);
+                    $('.declare').off('click').click(function() {
+                        $('#modaldeclare').modal('show');
+                        $('input[name=idmarchandise]').val(this.value);
+                        $('#march').val($(this).attr('marchandise'));
+                    })
                 })
             }
 

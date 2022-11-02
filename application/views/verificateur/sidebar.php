@@ -17,8 +17,16 @@
         <div class="container-fluid">
             <ul class="navbar-mobile__list list-unstyled">
                 <li>
-                    <a href="<?= site_url('declarant') ?>">
+                    <a href="<?= site_url('verificateur') ?>">
                         <i class="fas fa-chart-bar"></i>Marchandises</a>
+                </li>
+                <li>
+                    <a href="<?= site_url('verificateur/bon-entree') ?>">
+                        <i class="fas fa-chart-bar"></i>Bons d'entrée</a>
+                </li>
+                <li>
+                    <a href="<?= site_url('verificateur/bon-sortie') ?>">
+                        <i class="fas fa-chart-bar"></i>Bons de sortie</a>
                 </li>
             </ul>
         </div>
@@ -35,8 +43,16 @@
         <nav class="navbar-sidebar">
             <ul class="list-unstyled navbar__list">
                 <li>
-                    <a href="<?= site_url('declarant') ?>">
-                        <i class="fas fa-list"></i>Marchandises</a>
+                    <a href="<?= site_url('verificateur') ?>">
+                        <i class="fas fa-chart-bar"></i>Marchandises</a>
+                </li>
+                <li>
+                    <a href="<?= site_url('verificateur/bon-entree') ?>">
+                        <i class="fas fa-chart-bar"></i>Bons d'entrée</a>
+                </li>
+                <li>
+                    <a href="<?= site_url('verificateur/bon-sortie') ?>">
+                        <i class="fas fa-chart-bar"></i>Bons de sortie</a>
                 </li>
             </ul>
         </nav>

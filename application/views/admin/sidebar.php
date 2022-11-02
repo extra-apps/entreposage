@@ -21,6 +21,10 @@
                         <i class="fas fa-chart-bar"></i>Tableau de bord</a>
                 </li>
                 <li>
+                    <a href="<?= site_url('admin/marchandises') ?>">
+                        <i class="fas fa-list"></i>Marchandises</a>
+                </li>
+                <li>
                     <a href="<?= site_url('admin/clients') ?>">
                         <i class="fas fa-users"></i>Clients</a>
                 </li>
@@ -50,6 +54,10 @@
                 <li>
                     <a href="<?= site_url('admin') ?>">
                         <i class="fas fa-chart-bar"></i>Tableau de bord</a>
+                </li>
+                <li>
+                    <a href="<?= site_url('admin/marchandises') ?>">
+                        <i class="fas fa-list"></i>Marchandises</a>
                 </li>
                 <li>
                     <a href="<?= site_url('admin/clients') ?>">

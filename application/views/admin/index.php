@@ -74,11 +74,11 @@
                                     <div class="overview__inner">
                                         <div class="overview-box clearfix">
                                             <div class="icon">
-                                                <i class="zmdi zmdi-money"></i>
+                                                <i class="fa fa-list"></i>
                                             </div>
                                             <div class="text">
-                                                <h2>$1,06</h2>
-                                                <span>to</span>
+                                                <h2><?= count($this->db->join('declaration', 'declaration.idmarchandise=marchandise.idmarchandise')->get('marchandise')->result()) ?></h2>
+                                                <span>Marchandises déclarées</span>
                                             </div>
                                         </div>
                                     </div>

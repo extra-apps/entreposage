@@ -118,4 +118,133 @@ class Json extends CI_Controller
         $r = $this->db->order_by('idclient', 'desc')->get('client')->result();
         echo json_encode($r);
     }
+
+    function marchandise_get()
+    {
+        $this->db->select('marchandise.*, declaration.date, nomdeclarant declarant, numero_declaration, numero_liquidation');
+        $this->db->join('declaration', 'declaration.idmarchandise=marchandise.idmarchandise', 'left');
+        $this->db->join('declarant', 'declarant.iddeclarant=marchandise.iddeclarant');
+        $r = $this->db->order_by('idmarchandise', 'desc')->get('marchandise')->result();
+
+        $t = [];
+        foreach ($r as $e) {
+            if ($e->date) {
+                $e->declare = 1;
+            } else {
+                $e->declare = 0;
+            }
+
+            array_push($t, $e);
+        }
+        echo json_encode($t);
+    }
+
+    function marchandise()
+    {
+        $rep['success'] = false;
+        $data = [
+            'nommarchandise' => $nd = $this->input->post('nommarchandise'),
+            'code' => $tel = $this->input->post('code'),
+            'typemarchandise' => $em = $this->input->post('typemarchandise'),
+        ];
+
+        if (count($this->db->where('nommarchandise', $nd)->get('marchandise')->result())) {
+            $rep['message'] = "La nommarchandise $nd existe déjà.";
+            echo json_encode($rep);
+            exit;
+        }
+        $data['iddeclarant'] = $this->session->iddeclarant;
+
+        $this->db->insert('marchandise', $data);
+        $rep['message'] = "La marchandise $nd a été ajoutée.";
+        $rep['success'] = true;
+        echo json_encode($rep);
+    }
+
+    function marchandise_declare()
+    {
+        $rep['success'] = false;
+        $data = [
+            'numero_liquidation' => $this->input->post('numero_liquidation'),
+            'numero_declaration' => $this->input->post('numero_declaration'),
+            'qte' => $this->input->post('qte'),
+            'idmarchandise' => $im = $this->input->post('idmarchandise'),
+        ];
+        $data['iddeclarant'] = $this->session->iddeclarant;
+
+        if (count($this->db->where('idmarchandise', $im)->get('declaration')->result())) {
+            $rep['message'] = "La marchandise est déja déclarée.";
+            echo json_encode($rep);
+            exit;
+        }
+
+        $this->db->insert('declaration', $data);
+        $rep['message'] = "La marchandise a été déclarée.";
+        $rep['success'] = true;
+        echo json_encode($rep);
+    }
+
+    function entree()
+    {
+        $rep['success'] = false;
+        $data = [
+            'idmarchandise' => $id = $this->input->post('idmarchandise'),
+            'numeroentree' => $this->input->post('numeroentree'),
+            'immat' => $this->input->post('immat'),
+            'nomchauffeur' => $this->input->post('nomchauffeur'),
+        ];
+        $data['qte'] = $this->db->where('idmarchandise', $id)->get('marchandise')->row('qte');
+        $data['idverificateur'] = $this->session->idverificateur;
+
+
+        if (count($this->db->where('idmarchandise', $id)->get('entree')->result())) {
+            $rep['message'] = "Le bon d'entrée de cette marchandise est déja enregistré.";
+            echo json_encode($rep);
+            exit;
+        }
+
+        $this->db->insert('entree', $data);
+        $rep['message'] = "Le bon d'entrée de la marchandise a été créé.";
+        $rep['success'] = true;
+        echo json_encode($rep);
+    }
+
+    function sortie()
+    {
+        $rep['success'] = false;
+        $data = [
+            'idmarchandise' => $id = $this->input->post('idmarchandise'),
+            'numerosortie' => $this->input->post('numerosortie'),
+            'immat' => $this->input->post('immat'),
+            'qte' => $qte = $this->input->post('qte'),
+            'nomchauffeur' => $this->input->post('nomchauffeur'),
+        ];
+
+        $this->db->join('declaration', 'declaration.idmarchandise=marchandise.idmarchandise');
+        $qtem = @$this->db->where('marchandise.idmarchandise', $id)->get('marchandise')->result()[0]->qte;
+        $stot = 0;
+
+        $this->db->select('sum(qte) qte');
+        $r = $this->db->where('idmarchandise', $id)->get('sortie')->result();
+        $stot = $r[0]->qte;
+        $rest = $qtem - $stot;
+
+        if ($qte  > $rest) {
+            if ($stot > 0) {
+                $rep['message'] = "Vous avez déjà enregistré la sortie  d'une quantité de $stot pour cette marchandise, la quanté restant pour la sortie est de : " . $rest;
+            } else {
+                $rep['message'] = "Quantité non valide, veuillez entrer une quantité <= $qtem";
+            }
+            echo json_encode($rep);
+            exit;
+        }
+
+        $data['qte'] = $qte;
+        $data['idverificateur'] = $this->session->idverificateur;
+
+        $this->db->insert('sortie', $data);
+        $rep['message'] = "Le bon de sortie de la marchandise a été créé.";
+        $rep['success'] = true;
+        echo json_encode($rep);
+    }
 }
