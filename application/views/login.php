@@ -41,11 +41,11 @@
                             <form action="<?= site_url('app/connexion') ?>" method="post">
                                 <div class="form-group">
                                     <label>Email ou telephone</label>
-                                    <input required class="au-input au-input--full" name="login" placeholder="Email ou telephone">
+                                    <input required class="au-input au-input--full" name="login">
                                 </div>
                                 <div class="form-group">
                                     <label>Mot de passe</label>
-                                    <input required class="au-input au-input--full" type="password" name="pass" placeholder="Mot de passe">
+                                    <input required class="au-input au-input--full" type="password" name="pass">
                                 </div>
                                 <?php if ($this->session->message) : ?>
                                     <div class="form-group">

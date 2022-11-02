@@ -89,33 +89,9 @@
                             <div class="col-lg-12">
                                 <div class="au-card recent-report">
                                     <div class="au-card-inner">
-                                        <h3 class="title-2">recent reports</h3>
-                                        <div class="chart-info">
-                                            <div class="chart-info__left">
-                                                <div class="chart-note">
-                                                    <span class="dot dot--blue"></span>
-                                                    <span>products</span>
-                                                </div>
-                                                <div class="chart-note mr-0">
-                                                    <span class="dot dot--green"></span>
-                                                    <span>services</span>
-                                                </div>
-                                            </div>
-                                            <div class="chart-info__right">
-                                                <div class="chart-statis">
-                                                    <span class="index incre">
-                                                        <i class="zmdi zmdi-long-arrow-up"></i>25%</span>
-                                                    <span class="label">products</span>
-                                                </div>
-                                                <div class="chart-statis mr-0">
-                                                    <span class="index decre">
-                                                        <i class="zmdi zmdi-long-arrow-down"></i>10%</span>
-                                                    <span class="label">services</span>
-                                                </div>
-                                            </div>
-                                        </div>
+                                        <h3 class="title-2">Statistiques</h3>
                                         <div class="recent-report__chart">
-                                            <canvas id="recent-rep-chart"></canvas>
+                                            <canvas id="lineChart"></canvas>
                                         </div>
                                     </div>
                                 </div>
@@ -138,7 +114,70 @@
     </div>
 
     <?= $this->load->view('inc/js', null, true); ?>
+    <script>
+        $(function() {
+            var ctx = document.getElementById("lineChart");
+            if (ctx) {
+                ctx.height = 300;
+                var myChart = new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: ["Janvier", "Fevrier", "Mars", "Avril", "Mai", "Juin", "Juillet", "Aout", "Septembrer", "Octobre", "Novembre", "Decembre"],
+                        defaultFontFamily: "Poppins",
+                        datasets: [{
+                                label: "Marchandises",
+                                borderColor: "rgba(0,0,0,.09)",
+                                borderWidth: "1",
+                                backgroundColor: "rgba(0,0,0,.07)",
+                                data: <?= $tab1 ?>
+                            },
+                            {
+                                label: "Marchandises déclarées",
+                                borderColor: "rgba(255,0 , 0.9)",
+                                borderWidth: "1",
+                                backgroundColor: "rgba(239, 51, 64, 0.7)",
+                                pointHighlightStroke: "rgba(26,179,148,1)",
+                                data: <?= $tab2 ?>
+                            }
+                        ]
+                    },
+                    options: {
+                        legend: {
+                            position: 'top',
+                            labels: {
+                                fontFamily: 'Poppins'
+                            }
 
+                        },
+                        responsive: true,
+                        tooltips: {
+                            mode: 'index',
+                            intersect: false
+                        },
+                        hover: {
+                            mode: 'nearest',
+                            intersect: true
+                        },
+                        scales: {
+                            xAxes: [{
+                                ticks: {
+                                    fontFamily: "Poppins"
+
+                                }
+                            }],
+                            yAxes: [{
+                                ticks: {
+                                    beginAtZero: true,
+                                    fontFamily: "Poppins"
+                                }
+                            }]
+                        }
+
+                    }
+                });
+            }
+        })
+    </script>
 
 </body>
 

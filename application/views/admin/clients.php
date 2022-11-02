@@ -70,20 +70,20 @@
                     <div class="modal-body">
                         <div class="form-group">
                             <label for="">Nom du client</label>
-                            <input name="nomclient" required class="form-control" placeholder="Nom du client">
+                            <input name="nomclient" required class="form-control">
                         </div>
                         <div class="form-group">
                             <label for="">Telephone du client</label>
-                            <input name="telephone" required class="form-control telephone" placeholder="Telephone du client">
+                            <input name="telephone" required class="form-control telephone">
                         </div>
                         <div class="form-group">
                             <label for="">Email du client</label>
-                            <input name="email" required class="form-control" placeholder="Email du client">
+                            <input name="email" required class="form-control">
                         </div>
                         <div class="form-group">
                             <label for="">Mot de passe</label>
                             <div class="d-flex ">
-                                <input type="password" name="mdp" value="123456" class="form-control w-100" placeholder="Mot de passe" required>
+                                <input type="password" name="mdp" value="123456" class="form-control w-100" required>
                                 <div class="input-group-addon show_hide_password" style="cursor: pointer">
                                     <a href="#"><i class="text-danger fa fa-eye-slash" aria-hidden="true"></i></a>
                                 </div>

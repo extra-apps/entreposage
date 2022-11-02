@@ -23,7 +23,8 @@ class App extends CI_Controller
 		}
 
 		$data['mdp'] = $pass;
-		valid_email($login) ? $data['email'] = $login : $data['telephone'] = $login;
+		// valid_email($login) ? $data['email'] = $login : $data['telephone'] = $login;
+		$data['email'] = $login;
 		$r = $this->db->where($data)->get('admin')->result();
 		if (count($r)) {
 			$this->session->set_userdata([
