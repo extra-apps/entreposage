@@ -91,7 +91,7 @@
                                     <div class="au-card-inner">
                                         <h3 class="title-2">Statistiques</h3>
                                         <div class="recent-report__chart">
-                                            <canvas id="lineChart"></canvas>
+                                            <canvas id="graph"></canvas>
                                         </div>
                                     </div>
                                 </div>
@@ -116,7 +116,7 @@
     <?= $this->load->view('inc/js', null, true); ?>
     <script>
         $(function() {
-            var ctx = document.getElementById("lineChart");
+            var ctx = document.getElementById("graph");
             if (ctx) {
                 ctx.height = 300;
                 var myChart = new Chart(ctx, {
