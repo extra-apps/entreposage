@@ -23,6 +23,11 @@
     <link href="<?= base_url('assets/') ?>vendor/perfect-scrollbar/perfect-scrollbar.css" rel="stylesheet" media="all">
 
     <link href="<?= base_url('assets/') ?>css/theme.css" rel="stylesheet" media="all">
+    <style>
+        .login-wrap {
+            max-width: 400px;
+        }
+    </style>
 
 </head>
 
@@ -31,7 +36,7 @@
         <div class="page-content--bge5">
             <div class="container">
                 <div class="login-wrap">
-                    <div class="login-content">
+                    <div class="login-content carte" style="border-radius: 20px;">
                         <div class="login-logo">
                             <a href="#">
                                 <img src="<?= base_url('assets/') ?>images/logo.png" width="200px" height="200px" alt="">
@@ -40,12 +45,10 @@
                         <div class="login-form">
                             <form action="<?= site_url('app/connexion') ?>" method="post">
                                 <div class="form-group">
-                                    <label>Email ou telephone</label>
-                                    <input required class="au-input au-input--full" name="login">
+                                    <input required class="au-input au-input--full" name="login" placeholder="Email ou telephone">
                                 </div>
                                 <div class="form-group">
-                                    <label>Mot de passe</label>
-                                    <input required class="au-input au-input--full" type="password" name="pass">
+                                    <input required class="au-input au-input--full" type="password" name="pass" placeholder="Mot de passe">
                                 </div>
                                 <?php if ($this->session->message) : ?>
                                     <div class="form-group">
@@ -56,11 +59,6 @@
                                 <?php endif ?>
                                 <button class="btn btn-block btn-danger m-b-20" type="submit">connexion</button>
                             </form>
-                            <!-- <div class="register-link">
-                                <p>
-                                    <a href="#">Créer un compte</a>
-                                </p>
-                            </div> -->
                         </div>
                     </div>
                 </div>
