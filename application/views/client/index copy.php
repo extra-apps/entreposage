@@ -2,16 +2,16 @@
 <html lang="fr">
 
 <head>
-    <title>Marchandises | admin</title>
+    <title>Marchandises | verificateur</title>
     <?= $this->load->view('inc/css', null, true); ?>
 </head>
 
 <body class="animsition">
     <div class="page-wrapper">
-        <?= $this->load->view('admin/sidebar', null, true); ?>
+        <?= $this->load->view('verificateur/sidebar', null, true); ?>
 
         <div class="page-container">
-            <?= $this->load->view('admin/header', null, true); ?>
+            <?= $this->load->view('verificateur/header', null, true); ?>
 
             <div class="main-content">
                 <div class="section__content section__content--p30">
@@ -32,8 +32,6 @@
                                             <tr>
                                                 <th>#</th>
                                                 <th>Marchandise</th>
-                                                <th>Date péremption</th>
-                                                <th>Client</th>
                                                 <th>Code</th>
                                                 <th>Type</th>
                                                 <th>Etat</th>
@@ -75,11 +73,9 @@
                         <tr>
                         <td>${i+1}</td>
                         <td>${e.nommarchandise}</td>
-                        <td>${e.dateexpiration}</td>
-                        <td>${e.client}</td>
                         <td>${e.code}</td>
                         <td>${e.typemarchandise}</td>
-                        <td tooltip title='${l}' class='text-center'> <span class="font-weight-bold badge text-white ${e.declare ? 'badge-success' : 'badge-danger' } p-3">${e.declare ? 'DECLARE' : 'NON DECLARE' }</span></td>
+                        <td tooltip title='${l}' class="font-weight-bold text-white ${e.declare ? 'bg-success' : 'bg-danger' }">${e.declare ? 'DECLARE' : 'NON DECLARE' }</td>
                         <td>${e.declarant}</td>
                         </tr>
                         `;

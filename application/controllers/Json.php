@@ -121,20 +121,34 @@ class Json extends CI_Controller
 
     function marchandise_get()
     {
-        $this->db->select('marchandise.*, declaration.date, nomdeclarant declarant, numero_declaration, numero_liquidation');
+
+        $idclient = $this->input->get('idclient');
+
+        $this->db->select('marchandise.*,client.idclient, declaration.valide, declaration.date, declaration.quittance, nomdeclarant declarant, numero_declaration, numero_liquidation, client.nomclient client');
         $this->db->join('declaration', 'declaration.idmarchandise=marchandise.idmarchandise', 'left');
+        $this->db->join('client', 'client.idclient=marchandise.idclient');
         $this->db->join('declarant', 'declarant.iddeclarant=marchandise.iddeclarant');
         $r = $this->db->order_by('idmarchandise', 'desc')->get('marchandise')->result();
 
         $t = [];
         foreach ($r as $e) {
+            $earlier = new DateTime();
+            $later = new DateTime($e->dateexpiration);
+            $pos_diff = $earlier->diff($later)->format("%r%a");
+            $e->expirein = $pos_diff + 1;
             if ($e->date) {
                 $e->declare = 1;
             } else {
                 $e->declare = 0;
             }
-
-            array_push($t, $e);
+            $e->quittance = empty($e->quittance) ? null : base_url($e->quittance);
+            if ($idclient) {
+                if ($idclient == $e->idclient) {
+                    array_push($t, $e);
+                }
+            } else {
+                array_push($t, $e);
+            }
         }
         echo json_encode($t);
     }
@@ -146,13 +160,15 @@ class Json extends CI_Controller
             'nommarchandise' => $nd = $this->input->post('nommarchandise'),
             'code' => $tel = $this->input->post('code'),
             'typemarchandise' => $em = $this->input->post('typemarchandise'),
+            'dateexpiration'  => $this->input->post('dateexpiration'),
+            'idclient'  => $this->input->post('idclient'),
         ];
 
-        if (count($this->db->where('nommarchandise', $nd)->get('marchandise')->result())) {
-            $rep['message'] = "La nommarchandise $nd existe déjà.";
-            echo json_encode($rep);
-            exit;
-        }
+        // if (count($this->db->where('nommarchandise', $nd)->get('marchandise')->result())) {
+        //     $rep['message'] = "La nommarchandise $nd existe déjà.";
+        //     echo json_encode($rep);
+        //     exit;
+        // }
         $data['iddeclarant'] = $this->session->iddeclarant;
 
         $this->db->insert('marchandise', $data);
@@ -178,9 +194,54 @@ class Json extends CI_Controller
             exit;
         }
 
-        $this->db->insert('declaration', $data);
-        $rep['message'] = "La marchandise a été déclarée.";
-        $rep['success'] = true;
+        $path =  "upload/quittance/";
+        if (!file_exists($path)) {
+            mkdir($path, 0777, true);
+        }
+        $f = $_FILES['file']['name'] ?? '';
+        $f = explode('.', $f);
+        if (count($f) >= 2) {
+            $exe = end($f);
+            $f = time() . rand(1, 1000) . '.' . $exe;
+        } else {
+            $f = '';
+        }
+        $config = array(
+            'upload_path' => $path,
+            'overwrite' => TRUE,
+            'allowed_types' => "jpg|jpeg|png",
+            'file_name' => $f,
+            'max_size' => 500 // Ko
+        );
+        $this->load->library('upload', $config);
+
+        if ($this->upload->do_upload('file')) {
+            $d = $this->upload->data();
+            $nomFichier = $path . $d['file_name'];
+            $data['quittance'] = $nomFichier;
+            $this->db->insert('declaration', $data);
+            $rep['message'] = "La marchandise a été déclarée.";
+            $rep['success'] = true;
+        } else {
+            $rep['success'] = false;
+            $rep['message'] = 'Echec, vérifiez le fichier séléctionné : ' . @$this->upload->error_msg[0];
+        }
+
+        echo json_encode($rep);
+    }
+
+    function marchandise_valider()
+    {
+        $idm = $this->input->post('idmarchandise');
+        $rep['success'] = false;
+
+        if (count($this->db->where('idmarchandise', $idm)->get('declaration')->result())) {
+            $this->db->where('idmarchandise', $idm)->update('declaration', ['valide' => 1]);
+            $rep['success'] = true;
+            $rep['message'] = "Quittance validée";
+        } else {
+            $rep['message'] = "La marchandise doit etre déclarée avant de valider la quittance";
+        }
         echo json_encode($rep);
     }
 

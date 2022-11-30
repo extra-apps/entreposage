@@ -32,10 +32,14 @@
                                             <tr>
                                                 <th>#</th>
                                                 <th>Marchandise</th>
+                                                <th>Date péremption</th>
+                                                <th>Client</th>
                                                 <th>Code</th>
                                                 <th>Type</th>
                                                 <th>Etat</th>
                                                 <th>Déclarant</th>
+                                                <th>Quittance</th>
+                                                <th></th>
                                             </tr>
                                         </thead>
                                         <tbody></tbody>
@@ -56,6 +60,36 @@
         </div>
 
     </div>
+    <div class="modal fade" id="modalvalider" tabindex="-1" role="dialog" aria-hidden="true" data-backdrop="static">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4>Validation quittance</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form id="f-valider">
+                    <div class="modal-body">
+                        <input type="hidden" name="idmarchandise">
+                        <p>
+                            <b>Voulez-vous valider la quittance de la marchandise <span id="march"></span> ?</b>
+                        </p>
+                        <div class="form-group">
+                            <div id="rep"></div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
+                        <button type="submit" class="btn btn-danger">
+                            <span></span>
+                            Valider
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
     <?= $this->load->view('inc/js', null, true); ?>
     <script>
         $(function() {
@@ -69,25 +103,76 @@
                         if (e.declare) {
                             l = "Date declaration : " + e.date + "\nNumero liquidation : " + e.numero_liquidation + "\nNumero declaration : " + e.numero_declaration;
                         }
+                        var im = e.quittance;
+                        var ima = '';
+                        if (im) {
+                            ima = `<a href='${im}'><img src="${im}" style="width:50px;height:50px" class='image-rounded' /></a>`;
+                        }
                         str += `
                         <tr>
                         <td>${i+1}</td>
                         <td>${e.nommarchandise}</td>
+                        <td>${e.dateexpiration}</td>
+                        <td>${e.client}</td>
                         <td>${e.code}</td>
                         <td>${e.typemarchandise}</td>
-                        <td tooltip title='${l}' class="font-weight-bold text-white ${e.declare ? 'bg-success' : 'bg-danger' }">${e.declare ? 'DECLARE' : 'NON DECLARE' }</td>
+                        <td tooltip title='${l}' class='text-center'> <span class="font-weight-bold badge text-white ${e.declare ? 'badge-success' : 'badge-danger' } p-3">${e.declare ? 'DECLARE' : 'NON DECLARE' }</span></td>
                         <td>${e.declarant}</td>
+                        <td>
+                            ${ima}
+                        </td>
+                        <td>
+                        ${Number(e.valide) == 1  ? '' : "<button marchandise='"+e.nommarchandise+"' class='btn btn-danger valider' value='"+e.idmarchandise+"' >Valider quittance</button>"}
+                        </td>
                         </tr>
                         `;
+
                     });
                     table.find('tbody').empty().html(str);
                     $('span[nb]').html(r.length);
-                    $('[tooltip]').off('tooltip').tooltip()
+                    $('[tooltip]').off('tooltip').tooltip();
+                    $('.valider').off('click').click(function() {
+                        $('#rep').hide();
+                        $('#modalvalider').modal('show');
+                        $('input[name=idmarchandise]').val(this.value);
+                        $('#march').html($(this).attr('marchandise'));
+                    })
 
                 })
             }
 
             getdata();
+
+            $('#f-valider').submit(function() {
+                event.preventDefault();
+                var form = $(this);
+                var btn = $(':submit', form)
+                btn.find('span').removeClass().addClass('fa fa-spinner fa-spin');
+                var data = form.serialize();
+                $(':input', form).attr('disabled', true);
+                var rep = $('#rep', form);
+                rep.slideUp();
+                $.ajax({
+                    url: '<?= site_url('json/marchandise_valider') ?>',
+                    type: 'post',
+                    data: data,
+                    success: function(r) {
+                        btn.find('span').removeClass();
+                        $(':input', form).attr('disabled', false);
+                        if (r.success) {
+                            rep.removeClass().addClass('alert alert-success').html(r.message).slideDown();
+                            getdata();
+                        } else {
+                            rep.removeClass().addClass('alert alert-danger').html(r.message).slideDown();
+                        }
+                    },
+                    error: function(r) {
+                        console.log(r);
+                        alert("Echec reseau, la page va s'actualiser");
+                        location.reload();
+                    }
+                });
+            })
         })
     </script>
 

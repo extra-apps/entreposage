@@ -28,6 +28,7 @@ class Verificateur extends CI_Controller
 		$data['entree'] = $this->db->order_by('identree', 'desc')->get('entree')->result();
 
 		$this->db->where('marchandise.idmarchandise NOT IN (SELECT idmarchandise from entree)');
+		$this->db->where('declaration.valide', 1);
 		$data['marchandises'] = $this->db->join('declaration', 'declaration.idmarchandise=marchandise.idmarchandise')->get('marchandise')->result();
 		$this->load->view('verificateur/bon-entree', $data);
 	}

@@ -34,9 +34,12 @@
                                             <tr>
                                                 <th>#</th>
                                                 <th>Marchandise</th>
+                                                <th>Date péremption</th>
+                                                <th>Client</th>
                                                 <th>Code</th>
                                                 <th>Type</th>
                                                 <th>Etat</th>
+                                                <th>Quittance</th>
                                                 <th></th>
                                             </tr>
                                         </thead>
@@ -74,12 +77,27 @@
                             <input name="nommarchandise" required class="form-control">
                         </div>
                         <div class="form-group">
+                            <label for="">Client</label>
+                            <select name="idclient" id="" class="form-control" required>
+                                <?php foreach ($this->db->get('client')->result() as $el) { ?>
+                                    <option value="<?= $el->idclient ?>"><?= $el->nomclient ?></option>
+                                <?php } ?>
+                            </select>
+                        </div>
+                        <div class="form-group">
                             <label for="">Type de la marchandise</label>
                             <input name="typemarchandise" required class="form-control">
                         </div>
                         <div class="form-group">
                             <label for="">Code de la marchandise</label>
                             <input name="code" required class="form-control">
+                        </div>
+                        <?php
+                        $date = date('Y-m-d', strtotime("+ 6 month"));
+                        ?>
+                        <div class="form-group">
+                            <label for="">Date péremption</label>
+                            <input name="dateexpiration" type="date" required class="form-control" value="<?= $date ?>">
                         </div>
                         <div class="form-group">
                             <div id="rep"></div>
@@ -124,6 +142,10 @@
                         <div class="form-group">
                             <label for="">Quantité</label>
                             <input name="qte" required class="form-control" type="number" min="1">
+                        </div>
+                        <div class="form-group">
+                            <label for="">Image quittance (.png,.jpg,.jpeg)</label>
+                            <input accept=".png,.jpg,.jpeg" type="file" class="form-control" name="file" required>
                         </div>
                         <div class="form-group">
                             <div id="rep"></div>
@@ -182,7 +204,8 @@
                 var form = $(this);
                 var btn = $(':submit', form)
                 btn.find('span').removeClass().addClass('fa fa-spinner fa-spin');
-                var data = $(form).serialize();
+                var data = new FormData(this);
+                console.log(data);
                 $(':input', form).attr('disabled', true);
                 var rep = $('#rep', form);
                 rep.slideUp();
@@ -190,6 +213,8 @@
                     url: '<?= site_url('json/marchandise_declare') ?>',
                     type: 'post',
                     data: data,
+                    processData: false,
+                    contentType: false,
                     success: function(r) {
                         btn.find('span').removeClass();
                         $(':input', form).attr('disabled', false);
@@ -214,13 +239,23 @@
                 $.getJSON('<?= site_url('json/marchandise_get') ?>', function(r) {
                     var str = '';
                     $(r).each(function(i, e) {
+                        var im = e.quittance;
+                        var ima = '';
+                        if (im) {
+                            ima = `<a href='${im}'><img src="${im}" style="width:50px;height:50px" class='image-rounded' /></a>`;
+                        }
                         str += `
                         <tr>
                         <td>${i+1}</td>
                         <td>${e.nommarchandise}</td>
+                        <td>${e.dateexpiration}</td>
+                        <td>${e.client}</td>
                         <td>${e.code}</td>
                         <td>${e.typemarchandise}</td>
-                        <td class="font-weight-bold text-white ${e.declare ? 'bg-success' : 'bg-danger' }">${e.declare ? 'DECLARE' : 'NON DECLARE' }</td>
+                        <td class='text-center'> <span class="font-weight-bold badge text-white ${e.declare ? 'badge-success' : 'badge-danger' } p-3">${e.declare ? 'DECLARE' : 'NON DECLARE' }</span></td>
+                        <td>
+                            ${ima}
+                        </td>
                         <td>
                             ${e.declare ? '' : "<button marchandise='"+e.nommarchandise+"' class='btn btn-danger declare' value='"+e.idmarchandise+"' >Déclarer</button>"}
                         </td>
