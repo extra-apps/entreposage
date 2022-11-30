@@ -36,7 +36,6 @@
         });
 
         <?php if ($this->session->idclient) { ?>
-
             getNotif = function() {
                 $.getJSON('<?= site_url('json/notification') ?>', function(r) {
                     var nbnotif = r.length;
