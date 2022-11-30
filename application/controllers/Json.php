@@ -181,9 +181,9 @@ class Json extends CI_Controller
     {
         $rep['success'] = false;
         $data = [
-            'numero_liquidation' => $this->input->post('numero_liquidation'),
-            'numero_declaration' => $this->input->post('numero_declaration'),
-            'qte' => $this->input->post('qte'),
+            'numero_liquidation' => $nl = $this->input->post('numero_liquidation'),
+            'numero_declaration' => $nd = $this->input->post('numero_declaration'),
+            'qte' => $q = $this->input->post('qte'),
             'idmarchandise' => $im = $this->input->post('idmarchandise'),
         ];
         $data['iddeclarant'] = $this->session->iddeclarant;
@@ -220,6 +220,15 @@ class Json extends CI_Controller
             $nomFichier = $path . $d['file_name'];
             $data['quittance'] = $nomFichier;
             $this->db->insert('declaration', $data);
+
+            $mar = $this->db->where('idmarchandise', $im)->get('marchandise')->result()[0];
+            $cl = $this->db->where('idclient', $mar->idclient)->get('client')->result()[0];
+            $ag = $this->db->where('iddeclarant', $this->session->iddeclarant)->get('declarant')->result()[0];
+            $this->db->insert('notification', [
+                'idclient' => $cl->idclient,
+                'contenu' => "Cher(e) " . ucfirst($cl->nomclient) . ", votre marchandise $mar->nommarchandise a été déclarée par le déclarant $ag->nomdeclarant : Numéro declaration : $nd, Numéro liquidation : $nl, Qte : $q",
+            ]);
+
             $rep['message'] = "La marchandise a été déclarée.";
             $rep['success'] = true;
         } else {
@@ -237,6 +246,14 @@ class Json extends CI_Controller
 
         if (count($this->db->where('idmarchandise', $idm)->get('declaration')->result())) {
             $this->db->where('idmarchandise', $idm)->update('declaration', ['valide' => 1]);
+            $mar = $this->db->where('idmarchandise', $idm)->get('marchandise')->result()[0];
+            $cl = $this->db->where('idclient', $mar->idclient)->get('client')->result()[0];
+            $ag = $this->db->where('idverificateur', $this->session->idverificateur)->get('verificateur')->result()[0];
+
+            $this->db->insert('notification', [
+                'idclient' => $cl->idclient,
+                'contenu' => "Cher(e) " . ucfirst($cl->nomclient) . ", la quittance de votre marchandise $mar->nommarchandise a été validée par le vérificateur $ag->nomverif.",
+            ]);
             $rep['success'] = true;
             $rep['message'] = "Quittance validée";
         } else {

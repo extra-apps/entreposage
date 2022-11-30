@@ -1,5 +1,0 @@
-declarant joindre photo de quittance, declaranrat valider, puis etablit bon de srotie
-
-bon entree, quittance
- mse : date exiration
- 

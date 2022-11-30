@@ -257,7 +257,7 @@
                             ${ima}
                         </td>
                         <td>
-                            ${e.declare ? '' : "<button marchandise='"+e.nommarchandise+"' class='btn btn-danger declare' value='"+e.idmarchandise+"' >Déclarer</button>"}
+                            ${e.declare ? '' : "<button marchandise='"+e.nommarchandise+"' class='btn btn-outline-danger declare' value='"+e.idmarchandise+"' >Déclarer</button>"}
                         </td>
                         </tr>
                         `;
