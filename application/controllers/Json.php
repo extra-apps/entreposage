@@ -325,4 +325,16 @@ class Json extends CI_Controller
         $rep['success'] = true;
         echo json_encode($rep);
     }
+
+    function notification()
+    {
+        $idcl = $this->session->idclient;
+        $not = $this->db->where('idclient', $idcl)->order_by('idnotification', 'desc')->get('notification')->result();
+        echo json_encode($not);
+    }
+
+    function notification_del()
+    {
+        $this->db->where('idnotification', $this->input->get('item'))->delete('notification');
+    }
 }

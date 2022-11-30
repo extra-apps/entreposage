@@ -6,6 +6,18 @@
 
                 </form>
                 <div class="header-button">
+                    <div class="noti-wrap">
+                        <div class="noti__item js-item-menu">
+                            <i class="zmdi zmdi-notifications"></i>
+                            <span class="quantity" id="nbnotif" ></span>
+                            <div class="notifi-dropdown js-dropdown">
+                                <div class="notifi__title">
+                                    <p notif ></p>
+                                </div>
+                                <div notifzone style="max-height: 500px; overflow-y: auto;" ></div>
+                            </div>
+                        </div>
+                    </div>
                     <div class="account-wrap">
                         <div class="account-item clearfix js-item-menu">
                             <div class="content">

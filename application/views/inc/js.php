@@ -22,16 +22,6 @@
         var cu = current_url.split("?");
         current_url = cu[0];
         $(`a[href='${current_url}']`).closest("li").addClass("active");
-        // $(".table").DataTable({
-        //     dom: "lBfrtip",
-        //     buttons: ["excel", "pdf", "print"],
-        //     pageLength: 50,
-        //     lengthMenu: [
-        //         [10, 25, 50, 100, -1],
-        //         [10, 25, 50, 100, "All"],
-        //     ],
-        // });
-
         $(".show_hide_password").on('click', function(event) {
             event.preventDefault();
             var div = $(this);
@@ -44,5 +34,50 @@
                 div.find('i').removeClass("fa-eye-slash").addClass("fa-eye");
             }
         });
+
+        <?php if ($this->session->idclient) { ?>
+
+            getNotif = function() {
+                $.getJSON('<?= site_url('json/notification') ?>', function(r) {
+                    var nbnotif = r.length;
+                    $('#nbnotif').html(nbnotif);
+                    if (nbnotif > 1) {
+                        var m = "Vous avez " + nbnotif + " notifications";
+                    } else if (nbnotif == 0) {
+                        var m = "Aucune notification";
+                    } else {
+                        var m = "Vous avez " + nbnotif + " notification";
+                    }
+                    $('p[notif]').html(m);
+                    var str = '';
+                    $(r).each(function(i, e) {
+                        str += `
+                        <div class="notifi__item" item='${e.idnotification}'>
+                            <div class="bg-c1 img-cir img-40 bg-danger">
+                                <i class="zmdi zmdi-email-open"></i>
+                            </div>
+                            <div class="content">
+                                <p>${e.contenu}</p>
+                                <span class="date">${e.date}</span>
+                            </div>
+                        </div>
+                    `;
+                    });
+                    $('div[notifzone]').html(str);
+                    $('.notifi__item').off('click').click(function() {
+                        var id = $(this).attr('item');
+                        $.getJSON('<?= site_url('json/notification_del') ?>', {
+                            item: id
+                        });
+                    })
+
+                })
+            }
+
+            setInterval(() => {
+                getNotif();
+            }, 3000);
+
+        <?php } ?>
     })
 </script>
