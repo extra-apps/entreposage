@@ -28,6 +28,10 @@
                     <a href="<?= site_url('verificateur/bon-sortie') ?>">
                         <i class="fa fa-list"></i>Bons de sortie</a>
                 </li>
+                <li>
+                    <a href="<?= site_url('verificateur/valider-quittance') ?>">
+                        <i class="fa fa-check-circle"></i>Valider quittance</a>
+                </li>
             </ul>
         </div>
     </nav>
@@ -53,6 +57,10 @@
                 <li>
                     <a href="<?= site_url('verificateur/bon-sortie') ?>">
                         <i class="fa fa-list"></i>Bons de sortie</a>
+                </li>
+                <li>
+                    <a href="<?= site_url('verificateur/valider-quittance') ?>">
+                        <i class="fa fa-check-circle"></i>Valider quittance</a>
                 </li>
             </ul>
         </nav>

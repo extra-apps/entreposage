@@ -28,8 +28,9 @@ class Verificateur extends CI_Controller
 		$data['entree'] = $this->db->order_by('identree', 'desc')->get('entree')->result();
 
 		$this->db->where('marchandise.idmarchandise NOT IN (SELECT idmarchandise from entree)');
-		$this->db->where('declaration.valide', 1);
-		$data['marchandises'] = $this->db->join('declaration', 'declaration.idmarchandise=marchandise.idmarchandise')->get('marchandise')->result();
+		// $this->db->where('declaration.valide', 1);
+		// $this->db->join('declaration', 'declaration.idmarchandise=marchandise.idmarchandise');
+		$data['marchandises'] = $this->db->get('marchandise')->result();
 		$this->load->view('verificateur/bon-entree', $data);
 	}
 
@@ -42,5 +43,10 @@ class Verificateur extends CI_Controller
 		$this->db->join('declaration', 'declaration.idmarchandise=marchandise.idmarchandise');
 		$data['marchandises'] = $this->db->get('entree')->result();
 		$this->load->view('verificateur/bon-sortie', $data);
+	}
+
+	public function valider_quittance()
+	{
+		$this->load->view('verificateur/valider_quittance');
 	}
 }

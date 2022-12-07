@@ -20,6 +20,10 @@
                     <a href="<?= site_url('declarant') ?>">
                         <i class="fas fa-chart-bar"></i>Marchandises</a>
                 </li>
+                <li>
+                    <a href="<?= site_url('declarant/bon-sortie') ?>">
+                        <i class="fa fa-list"></i>Bons de sortie</a>
+                </li>
             </ul>
         </div>
     </nav>
@@ -37,6 +41,10 @@
                 <li>
                     <a href="<?= site_url('declarant') ?>">
                         <i class="fas fa-list"></i>Marchandises</a>
+                </li>
+                <li>
+                    <a href="<?= site_url('declarant/bon-sortie') ?>">
+                        <i class="fa fa-list"></i>Bons de sortie</a>
                 </li>
             </ul>
         </nav>

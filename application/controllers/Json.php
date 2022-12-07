@@ -292,10 +292,10 @@ class Json extends CI_Controller
         $rep['success'] = false;
         $data = [
             'idmarchandise' => $id = $this->input->post('idmarchandise'),
-            'numerosortie' => $this->input->post('numerosortie'),
-            'immat' => $this->input->post('immat'),
+            'numerosortie' => $ns= $this->input->post('numerosortie'),
+            'immat' => $imat= $this->input->post('immat'),
             'qte' => $qte = $this->input->post('qte'),
-            'nomchauffeur' => $this->input->post('nomchauffeur'),
+            'nomchauffeur' => $chauf= $this->input->post('nomchauffeur'),
         ];
 
         $this->db->join('declaration', 'declaration.idmarchandise=marchandise.idmarchandise');
@@ -321,6 +321,13 @@ class Json extends CI_Controller
         $data['idverificateur'] = $this->session->idverificateur;
 
         $this->db->insert('sortie', $data);
+        $mar = $this->db->where('idmarchandise', $id)->get('marchandise')->result()[0];
+        $cl = $this->db->where('idclient', $mar->idclient)->get('client')->result()[0];
+        $ag = $this->db->where('idverificateur', $this->session->idverificateur)->get('verificateur')->result()[0];
+        $this->db->insert('notification', [
+            'idclient' => $cl->idclient,
+            'contenu' => "Cher(e) " . ucfirst($cl->nomclient) . ",un bon de sortie a été enregistré pour votre marchandise $mar->nommarchandise par l'agent $ag->nomverif. Qte sortie : $qte, Numero Sortie : $ns, Immat : $imat, Chauffeur : $chauf.",
+        ]);
         $rep['message'] = "Le bon de sortie de la marchandise a été créé.";
         $rep['success'] = true;
         echo json_encode($rep);
