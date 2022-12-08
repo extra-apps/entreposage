@@ -38,8 +38,6 @@
                                                 <th>Type</th>
                                                 <th>Etat</th>
                                                 <th>Déclarant</th>
-                                                <th>Quittance</th>
-                                                <th></th>
                                             </tr>
                                         </thead>
                                         <tbody></tbody>
@@ -118,12 +116,6 @@
                         <td>${e.typemarchandise}</td>
                         <td tooltip title='${l}' class='text-center'> <span class="font-weight-bold badge text-white ${e.declare ? 'badge-success' : 'badge-danger' } p-3">${e.declare ? 'PAYÉ ' : 'NON PAYÉ' }</span></td>
                         <td>${e.declarant}</td>
-                        <td>
-                            ${ima}
-                        </td>
-                        <td>
-                        ${Number(e.valide) == 1  ? '' : "<button marchandise='"+e.nommarchandise+"' class='btn btn-danger valider' value='"+e.idmarchandise+"' >Valider quittance</button>"}
-                        </td>
                         </tr>
                         `;
 
