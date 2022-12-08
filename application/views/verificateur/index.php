@@ -116,7 +116,7 @@
                         <td>${e.client}</td>
                         <td>${e.code}</td>
                         <td>${e.typemarchandise}</td>
-                        <td tooltip title='${l}' class='text-center'> <span class="font-weight-bold badge text-white ${e.declare ? 'badge-success' : 'badge-danger' } p-3">${e.declare ? 'DECLARE' : 'NON DECLARE' }</span></td>
+                        <td tooltip title='${l}' class='text-center'> <span class="font-weight-bold badge text-white ${e.declare ? 'badge-success' : 'badge-danger' } p-3">${e.declare ? 'PAYÉ ' : 'NON PAYÉ' }</span></td>
                         <td>${e.declarant}</td>
                         <td>
                             ${ima}

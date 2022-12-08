@@ -21,7 +21,7 @@
                                 <div class="overview-wrap mb-3">
                                     <h2 class="title-1">Marchandises <span class="badge badge-danger badge-pill" nb></span> </h2>
                                     <button class="btn btn-danger" data-toggle="modal" data-target="#modal">
-                                        <i class="zmdi zmdi-plus-circle"></i>Ajouter</button>
+                                        <i class="zmdi zmdi-plus-circle"></i> Declarer une marchandise</button>
                                 </div>
                             </div>
                         </div>
@@ -107,7 +107,7 @@
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
                         <button type="submit" class="btn btn-danger">
                             <span></span>
-                            Ajouter
+                            Déclarer
                         </button>
                     </div>
                 </form>
@@ -155,7 +155,7 @@
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
                         <button type="submit" class="btn btn-danger">
                             <span></span>
-                            Déclarer
+                            Payer
                         </button>
                     </div>
                 </form>
@@ -252,7 +252,7 @@
                         <td>${e.client}</td>
                         <td>${e.code}</td>
                         <td>${e.typemarchandise}</td>
-                        <td class='text-center'> <span class="font-weight-bold badge text-white ${e.declare ? 'badge-success' : 'badge-danger' } p-3">${e.declare ? 'DECLARE' : 'NON DECLARE' }</span></td>
+                        <td class='text-center'> <span class="font-weight-bold badge text-white ${e.declare ? 'badge-success' : 'badge-danger' } p-3">${e.declare ? 'PAYÉ ' : 'NON PAYÉ' }</span></td>
                         <td>
                             ${ima}
                         </td>
