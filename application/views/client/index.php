@@ -32,7 +32,6 @@
                                             <tr>
                                                 <th>#</th>
                                                 <th>Marchandise</th>
-                                                <th>Date péremption</th>
                                                 <th>Code</th>
                                                 <th>Type</th>
                                                 <th>Etat</th>
@@ -85,8 +84,7 @@
                         str += `
                         <tr>
                         <td>${i+1}</td>
-                        <td class='font-weight-bold ${cl}' title='${tit}'>${e.nommarchandise}</td>
-                        <td>${e.dateexpiration}</td>
+                        <td >${e.nommarchandise}</td>
                         <td>${e.code}</td>
                         <td>${e.typemarchandise}</td>
                         <td tooltip title='${l}' class='text-center'> <span class="font-weight-bold badge text-white ${e.declare ? 'badge-success' : 'badge-danger' } p-3">${e.declare ? 'DECLARE' : 'NON DECLARE' }</span></td>

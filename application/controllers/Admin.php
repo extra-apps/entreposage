@@ -51,4 +51,9 @@ class Admin extends CI_Controller
 	{
 		$this->load->view('admin/marchandises');
 	}
+
+	function notification() {
+		$this->load->view('admin/notification');
+
+	}
 }

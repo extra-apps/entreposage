@@ -32,7 +32,7 @@
                                             <tr>
                                                 <th>#</th>
                                                 <th>Marchandise</th>
-                                                <th>Date péremption</th>
+                                                <!-- <th>Date péremption</th> -->
                                                 <th>Client</th>
                                                 <th>Code</th>
                                                 <th>Type</th>
@@ -110,7 +110,6 @@
                         <tr>
                         <td>${i+1}</td>
                         <td>${e.nommarchandise}</td>
-                        <td>${e.dateexpiration}</td>
                         <td>${e.client}</td>
                         <td>${e.code}</td>
                         <td>${e.typemarchandise}</td>

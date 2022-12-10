@@ -17,7 +17,12 @@ class Verificateur extends CI_Controller
 		}
 		$this->user = $u[0];
 	}
-	public function index()
+
+	function index() {
+		redirect('verificateur/bon-entree');
+	}
+
+	public function marchandise()
 	{
 		$this->load->view('verificateur/index');
 	}

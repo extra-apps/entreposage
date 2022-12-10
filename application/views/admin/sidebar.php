@@ -36,7 +36,10 @@
                     <a href="<?= site_url('admin/declarants') ?>">
                         <i class="fas fa-calendar-alt"></i>Déclarants</a>
                 </li>
-
+                <li>
+                    <a href="<?= site_url('admin/notification') ?>" class="small">
+                        <i class="fas fa-bell"></i>Parametre notification</a>
+                </li>
             </ul>
         </div>
     </nav>
@@ -70,6 +73,10 @@
                 <li>
                     <a href="<?= site_url('admin/declarants') ?>">
                         <i class="fas fa-calendar-alt"></i>Déclarants</a>
+                </li>
+                <li>
+                    <a href="<?= site_url('admin/notification') ?>" class="small">
+                        <i class="fas fa-bell"></i>Parametre notification</a>
                 </li>
             </ul>
         </nav>

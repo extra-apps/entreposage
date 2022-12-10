@@ -17,20 +17,20 @@
         <div class="container-fluid">
             <ul class="navbar-mobile__list list-unstyled">
                 <li>
-                    <a href="<?= site_url('verificateur') ?>">
-                        <i class="fas fa-recycle  "></i>Marchandises</a>
-                </li>
-                <li>
                     <a href="<?= site_url('verificateur/bon-entree') ?>">
                         <i class="fas fa-plus-square"></i>Bons d'entrée</a>
+                </li>
+                <li>
+                    <a href="<?= site_url('verificateur/valider-quittance') ?>">
+                        <i class="fa fa-check-circle"></i>Valider quittance</a>
                 </li>
                 <li>
                     <a href="<?= site_url('verificateur/bon-sortie') ?>">
                         <i class="fa fa-list"></i>Bons de sortie</a>
                 </li>
                 <li>
-                    <a href="<?= site_url('verificateur/valider-quittance') ?>">
-                        <i class="fa fa-check-circle"></i>Valider quittance</a>
+                    <a href="<?= site_url('verificateur/marchandise') ?>">
+                        <i class="fas fa-recycle  "></i>Marchandises</a>
                 </li>
             </ul>
         </div>
@@ -47,20 +47,20 @@
         <nav class="navbar-sidebar">
             <ul class="list-unstyled navbar__list">
                 <li>
-                    <a href="<?= site_url('verificateur') ?>">
-                        <i class="fas fa-recycle  "></i>Marchandises</a>
-                </li>
-                <li>
                     <a href="<?= site_url('verificateur/bon-entree') ?>">
                         <i class="fas fa-plus-square"></i>Bons d'entrée</a>
+                </li>
+                <li>
+                    <a href="<?= site_url('verificateur/valider-quittance') ?>">
+                        <i class="fa fa-check-circle"></i>Valider quittance</a>
                 </li>
                 <li>
                     <a href="<?= site_url('verificateur/bon-sortie') ?>">
                         <i class="fa fa-list"></i>Bons de sortie</a>
                 </li>
                 <li>
-                    <a href="<?= site_url('verificateur/valider-quittance') ?>">
-                        <i class="fa fa-check-circle"></i>Valider quittance</a>
+                    <a href="<?= site_url('verificateur/marchandise') ?>">
+                        <i class="fas fa-recycle  "></i>Marchandises</a>
                 </li>
             </ul>
         </nav>

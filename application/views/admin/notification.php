@@ -2,16 +2,16 @@
 <html lang="fr">
 
 <head>
-    <title>Bons de sortie | verificateur</title>
+    <title>Parametre notification | admin</title>
     <?= $this->load->view('inc/css', null, true); ?>
 </head>
 
 <body class="animsition">
     <div class="page-wrapper">
-        <?= $this->load->view('verificateur/sidebar', null, true); ?>
+        <?= $this->load->view('admin/sidebar', null, true); ?>
 
         <div class="page-container">
-            <?= $this->load->view('verificateur/header', null, true); ?>
+            <?= $this->load->view('admin/header', null, true); ?>
 
             <div class="main-content">
                 <div class="section__content section__content--p30">
@@ -19,7 +19,7 @@
                         <div class="row">
                             <div class="col-md-12">
                                 <div class="overview-wrap mb-3">
-                                    <h2 class="title-1">Bons de sortie Marchandises <span class="badge badge-danger badge-pill" nb></span> </h2>
+                                    <h2 class="title-1">Notifications </h2>
                                     <button class="btn btn-danger" data-toggle="modal" data-target="#modal">
                                         <i class="zmdi zmdi-plus-circle"></i> Enregistrer</button>
                                 </div>
@@ -33,24 +33,30 @@
                                         <thead>
                                             <tr>
                                                 <th>#</th>
-                                                <th>Marchandise</th>
-                                                <th>Num. sortie</th>
-                                                <th>Immat.</th>
-                                                <th>Qte</th>
-                                                <th>Chauffeur</th>
-                                                <th>Date</th>
+                                                <th>Nom parametre</th>
+                                                <th>Contenu</th>
+                                                <th>Clients</th>
+                                                <th>Date d'envoi</th>
                                             </tr>
                                         </thead>
                                         <tbody>
                                             <?php $n = 1;
-                                            foreach ($sortie as $e) { ?>
+                                            foreach ($this->db->order_by('idparametre', 'desc')->get('parametre')->result() as $e) {
+                                                $cl = '';
+                                                foreach ($this->db->where_in('idclient', (array) json_decode($e->reglage))->get('client')->result() as $c) {
+                                                    $cl .= "{$c->nomclient}, ";
+                                                }
+
+                                                $co = $e->contenu;
+                                                if (strlen($co) > 60) {
+                                                    $co = substr($co, 0, 60) . " ...";
+                                                }
+                                            ?>
                                                 <tr>
                                                     <td><?= $n++ ?></td>
-                                                    <td><?= $e->nommarchandise ?></td>
-                                                    <td><?= $e->numerosortie ?></td>
-                                                    <td><?= $e->immat ?></td>
-                                                    <td><?= $e->qte ?></td>
-                                                    <td><?= $e->nomchauffeur ?></td>
+                                                    <td><?= $e->nomparametre ?></td>
+                                                    <td data-toggle="tooltip" title="<?= $e->contenu ?>"><?= $co ?></td>
+                                                    <td><?= $cl ?></td>
                                                     <td><?= $e->date ?></td>
                                                 </tr>
                                             <?php } ?>
@@ -76,7 +82,7 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h4>Nouveau bon de sortie</h4>
+                    <h4>Nouvelle notification</h4>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -84,28 +90,24 @@
                 <form id="f-add">
                     <div class="modal-body">
                         <div class="form-group">
-                            <label for="">Marchandise</label>
-                            <select name="idmarchandise" id="" required class="form-control">
-                                <?php foreach ($marchandises as $e) { ?>
-                                    <option value="<?= $e->idmarchandise ?>"><?= "$e->nommarchandise (qte: $e->qte)" ?></option>
+                            <label for="">Nom parametre</label>
+                            <input name="nomparametre" required class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label for="">Contenu</label>
+                            <textarea name="contenu" id="" class="form-control" maxlength="600"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="">Date d'envoi</label>
+                            <input name="date" required class="form-control" type="date" value="<?= date('Y-m-d') ?>">
+                        </div>
+                        <div class="form-group">
+                            <label for="">Client</label>
+                            <select name="idclient[]" multiple required class="form-control chosen-select">
+                                <?php foreach ($this->db->get('client')->result() as $e) { ?>
+                                    <option value="<?= $e->idclient ?>"><?= $e->nomclient ?></option>
                                 <?php } ?>
                             </select>
-                        </div>
-                        <div class="form-group">
-                            <label for="">Qte sortie</label>
-                            <input name="qte" required class="form-control" type="number" min="1">
-                        </div>
-                        <div class="form-group">
-                            <label for="">Numero sortie</label>
-                            <input name="numerosortie" required class="form-control telephone">
-                        </div>
-                        <div class="form-group">
-                            <label for="">Immat</label>
-                            <input name="immat" required class="form-control">
-                        </div>
-                        <div class="form-group">
-                            <label for="">Chauffeur</label>
-                            <input name="nomchauffeur" required class="form-control">
                         </div>
                         <div class="form-group">
                             <div id="rep"></div>
@@ -123,8 +125,16 @@
         </div>
     </div>
     <?= $this->load->view('inc/js', null, true); ?>
+    <script src="<?= base_url('assets/chosen/chosen.jquery.min.js') ?>"></script>
+    <link rel="stylesheet" href="<?= base_url('assets/chosen/chosen.min.css') ?>">
+    <style>
+        .chosen-container {
+            width: 100% !important
+        }
+    </style>
     <script>
         $(function() {
+            $(".chosen-select").chosen();
 
             $('#f-add').submit(function() {
                 event.preventDefault();
@@ -136,7 +146,7 @@
                 var rep = $('#rep', form);
                 rep.slideUp();
                 $.ajax({
-                    url: '<?= site_url('json/sortie') ?>',
+                    url: '<?= site_url('json/notif') ?>',
                     type: 'post',
                     data: data,
                     success: function(r) {
@@ -147,13 +157,12 @@
                             rep.removeClass().addClass('alert alert-success').html(r.message).slideDown();
                             setTimeout(() => {
                                 location.reload();
-                            }, 2000);
+                            }, 5000);
                         } else {
                             rep.removeClass().addClass('alert alert-danger').html(r.message).slideDown();
                         }
                     },
                     error: function(r) {
-                        console.error(r);
                         alert("Echec reseau, la page va s'actualiser");
                         location.reload();
                     }

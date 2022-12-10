@@ -292,14 +292,20 @@ class Json extends CI_Controller
         $rep['success'] = false;
         $data = [
             'idmarchandise' => $id = $this->input->post('idmarchandise'),
-            'numerosortie' => $ns= $this->input->post('numerosortie'),
-            'immat' => $imat= $this->input->post('immat'),
+            'numerosortie' => $ns = $this->input->post('numerosortie'),
+            'immat' => $imat = $this->input->post('immat'),
             'qte' => $qte = $this->input->post('qte'),
-            'nomchauffeur' => $chauf= $this->input->post('nomchauffeur'),
+            'nomchauffeur' => $chauf = $this->input->post('nomchauffeur'),
         ];
 
         $this->db->join('declaration', 'declaration.idmarchandise=marchandise.idmarchandise');
-        $qtem = @$this->db->where('marchandise.idmarchandise', $id)->get('marchandise')->result()[0]->qte;
+        $dec = @$this->db->where('marchandise.idmarchandise', $id)->get('marchandise')->result()[0];
+        if ($dec->valide == 0) {
+            $rep['message'] = "Vous devez d'abord valider la quittance avant d'etablir le bon de sortie de cette marchandise.";
+            echo json_encode($rep);
+            exit;
+        }
+        $qtem = @$dec->qte;
         $stot = 0;
 
         $this->db->select('sum(qte) qte');
@@ -343,5 +349,36 @@ class Json extends CI_Controller
     function notification_del()
     {
         $this->db->where('idnotification', $this->input->get('item'))->delete('notification');
+    }
+
+    function notif()
+    {
+        $date = $this->input->post('date');
+        $idclient = (array) $this->input->post('idclient');
+        $contenu = $this->input->post('contenu');
+        $nomparametre = $this->input->post('nomparametre');
+
+        if ($date == date('Y-m-d')) {
+            $rep['message'] = "Notification envoyée avec succes.";
+            foreach ($idclient as $id) {
+                if (count($this->db->where('idclient', $id)->get('client')->result())) {
+                    $m = "$nomparametre <br>$contenu";
+                    $this->db->insert('notification', [
+                        'idclient' => $id,
+                        'contenu' => $m
+                    ]);
+                }
+            }
+        } else {
+            $this->db->insert('parametre', [
+                'nomparametre' => $nomparametre,
+                'date' => $date,
+                'contenu' => $contenu,
+                'reglage' => json_encode($idclient),
+            ]);
+            $rep['message'] = "Notification parametrée avec succes pour la date $date";
+        }
+        $rep['success'] = true;
+        echo json_encode($rep);
     }
 }

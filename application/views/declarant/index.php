@@ -21,7 +21,7 @@
                                 <div class="overview-wrap mb-3">
                                     <h2 class="title-1">Marchandises <span class="badge badge-danger badge-pill" nb></span> </h2>
                                     <button class="btn btn-danger" data-toggle="modal" data-target="#modal">
-                                        <i class="zmdi zmdi-plus-circle"></i> Declarer une marchandise</button>
+                                        <i class="zmdi zmdi-plus-circle"></i> Enregistrer marchandise</button>
                                 </div>
                             </div>
                         </div>
@@ -34,7 +34,7 @@
                                             <tr>
                                                 <th>#</th>
                                                 <th>Marchandise</th>
-                                                <th>Date péremption</th>
+                                                <!-- <th>Date péremption</th> -->
                                                 <th>Client</th>
                                                 <th>Code</th>
                                                 <th>Type</th>
@@ -95,10 +95,10 @@
                         <?php
                         $date = date('Y-m-d', strtotime("+ 6 month"));
                         ?>
-                        <div class="form-group">
+                        <!-- <div class="form-group">
                             <label for="">Date péremption</label>
                             <input name="dateexpiration" type="date" required class="form-control" value="<?= $date ?>">
-                        </div>
+                        </div> -->
                         <div class="form-group">
                             <div id="rep"></div>
                         </div>
@@ -248,7 +248,6 @@
                         <tr>
                         <td>${i+1}</td>
                         <td>${e.nommarchandise}</td>
-                        <td>${e.dateexpiration}</td>
                         <td>${e.client}</td>
                         <td>${e.code}</td>
                         <td>${e.typemarchandise}</td>
