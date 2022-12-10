@@ -7,6 +7,19 @@ class App extends CI_Controller
 	function __construct()
 	{
 		parent::__construct();
+		$leo = time();
+		foreach ($this->db->get('parametre')->result() as $e) {
+			foreach ($this->db->where_in('idclient', (array) json_decode($e->reglage))->get('client')->result() as $c) {
+				$d = strtotime($e->date);
+				if ($d <= $leo) {
+					$this->db->insert('notification', [
+						'idclient' => $c->idclient,
+						'contenu' => $e->contenu
+					]);
+					$this->db->where('idparametre', $e->idparametre)->delete('parametre');
+				}
+			}
+		}
 	}
 	public function index()
 	{
@@ -41,8 +54,7 @@ class App extends CI_Controller
 				'idverificateur' => $r[0]->idverificateur
 			]);
 			redirect('verificateur');
-		}
-		else if (count($r = $this->db->where($data)->get('client')->result())) {
+		} else if (count($r = $this->db->where($data)->get('client')->result())) {
 			$this->session->set_userdata([
 				'idclient' => $r[0]->idclient
 			]);
