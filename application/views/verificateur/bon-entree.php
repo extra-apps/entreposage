@@ -39,6 +39,7 @@
                                                 <th>Qte</th>
                                                 <th>Chauffeur</th>
                                                 <th>Date</th>
+                                                <th></th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -52,6 +53,7 @@
                                                     <td><?= $e->qte ?></td>
                                                     <td><?= $e->nomchauffeur ?></td>
                                                     <td><?= $e->date ?></td>
+                                                    <td><button value="<?= $e->identree ?>" class="btn btn-outline-danger bdel"><i class="fa fa-trash"></i></button></td>
                                                 </tr>
                                             <?php } ?>
                                         </tbody>
@@ -118,6 +120,34 @@
             </div>
         </div>
     </div>
+    <div class="modal fade" id="modaldel" tabindex="-1" role="dialog" aria-hidden="true" data-backdrop="static">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4>Suppresion</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form id="f-del">
+                    <input type="hidden" name="id">
+                    <div class="modal-body">
+                        <p>Voulez-vous vraiment supprimé ?</p>
+                        <div class="form-group">
+                            <div id="rep"></div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">NON</button>
+                        <button type="submit" class="btn btn-danger">
+                            <span></span>
+                            OUI
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
     <?= $this->load->view('inc/js', null, true); ?>
     <script>
         $(function() {
@@ -140,6 +170,45 @@
                         $(':input', form).attr('disabled', false);
                         if (r.success) {
                             form[0].reset();
+                            rep.removeClass().addClass('alert alert-success').html(r.message).slideDown();
+                            setTimeout(() => {
+                                location.reload();
+                            }, 2000);
+                        } else {
+                            rep.removeClass().addClass('alert alert-danger').html(r.message).slideDown();
+                        }
+                    },
+                    error: function(r) {
+                        console.error(r);
+                        alert("Echec reseau, la page va s'actualiser");
+                        location.reload();
+                    }
+                });
+            })
+
+            $('.bdel').off('click').click(function() {
+                var modal = $('#modaldel');
+                $('[name=id]', $('#f-del')).val(this.value);
+                modal.modal();
+            })
+
+            $('#f-del').submit(function() {
+                event.preventDefault();
+                var form = $(this);
+                var btn = $(':submit', form)
+                btn.find('span').removeClass().addClass('fa fa-spinner fa-spin');
+                var data = $(form).serialize();
+                $(':input', form).attr('disabled', true);
+                var rep = $('#rep', form);
+                rep.slideUp();
+                $.ajax({
+                    url: '<?= site_url('json/entree_del') ?>',
+                    type: 'post',
+                    data: data,
+                    success: function(r) {
+                        btn.find('span').removeClass();
+                        $(':input', form).attr('disabled', false);
+                        if (r.success) {
                             rep.removeClass().addClass('alert alert-success').html(r.message).slideDown();
                             setTimeout(() => {
                                 location.reload();

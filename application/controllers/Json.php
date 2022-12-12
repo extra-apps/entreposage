@@ -381,4 +381,58 @@ class Json extends CI_Controller
         $rep['success'] = true;
         echo json_encode($rep);
     }
+
+    function declarant_del()
+    {
+        $id = $this->input->post('id');
+        $this->db->where('iddeclarant', $id)->delete('declarant');
+        $rep['success'] = true;
+        $rep['message'] = "Le compte du declarant a été supprimé.";
+        echo json_encode($rep);
+    }
+
+    function verificateur_del()
+    {
+        $id = $this->input->post('id');
+        $this->db->where('idverificateur', $id)->delete('verificateur');
+        $rep['success'] = true;
+        $rep['message'] = "Le compte du verificateur a été supprimé.";
+        echo json_encode($rep);
+    }
+
+    function client_del()
+    {
+        $id = $this->input->post('id');
+        $this->db->where('idclient', $id)->delete('client');
+        $rep['success'] = true;
+        $rep['message'] = "Le compte du client a été supprimé.";
+        echo json_encode($rep);
+    }
+
+    function mse_del()
+    {
+        $id = $this->input->post('id');
+        $this->db->where('idmarchandise', $id)->delete('marchandise');
+        $rep['success'] = true;
+        $rep['message'] = "La marchandise a été supprimée.";
+        echo json_encode($rep);
+    }
+
+    function entree_del()
+    {
+        $id = $this->input->post('id');
+        $this->db->where('identree', $id)->delete('entree');
+        $rep['success'] = true;
+        $rep['message'] = "Le bon d'entrée de la marchandise a été supprimé.";
+        echo json_encode($rep);
+    }
+
+    function sortie_del()
+    {
+        $id = $this->input->post('id');
+        $this->db->where('idsortie', $id)->delete('sortie');
+        $rep['success'] = true;
+        $rep['message'] = "Le bon de sortie de la marchandise a été supprimé.";
+        echo json_encode($rep);
+    }
 }
